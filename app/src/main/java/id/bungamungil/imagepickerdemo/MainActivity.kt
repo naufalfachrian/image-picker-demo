@@ -1,8 +1,9 @@
 package id.bungamungil.imagepickerdemo
 
+import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,5 +31,19 @@ class MainActivity : AppCompatActivity(), ImageAdapter.OnItemViewClicked {
             imagePicker.type = "image/*"
             startActivityForResult(imagePicker, imagePickerRequest)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            imagePickerRequest -> handleImagePickerResult(resultCode, data)
+        }
+    }
+
+    private fun handleImagePickerResult(resultCode: Int, data: Intent?) {
+        val contentUrl = data?.data
+        if (resultCode != Activity.RESULT_OK || contentUrl == null) return
+        adapter.items.add(contentUrl)
+        adapter.notifyDataSetChanged()
     }
 }

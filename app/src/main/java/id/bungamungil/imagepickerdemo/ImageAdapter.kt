@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_image.view.*
 
-class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(private val onItemViewClicked: OnItemViewClicked? = null) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return R.layout.item_image
@@ -24,8 +24,16 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.itemView.image.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, R.drawable.ic_add_circle_outline_black_24dp))
+
+        holder.itemView.setOnClickListener {
+            onItemViewClicked?.onItemViewClicked(position, it)
+        }
     }
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface OnItemViewClicked {
+        fun onItemViewClicked(position: Int, itemView: View)
+    }
 
 }
